@@ -1,3 +1,6 @@
+#ifndef TCP_SERVER_HH
+#define TCP_SERVER_HH
+
 // Third-party libraries
 #include <WinSock2.h>
 #include <winsock.h>
@@ -29,6 +32,7 @@ public:
         delete this->WSAData;
         std::cout << "WSAData deleted" << std::endl;
         closesocket(this->m_socket);
+        closesocket(this->mn_socket);
         std::cout << "Socket closed" << std::endl;
         #if defined(_WIN32)
             WSACleanup();
@@ -50,3 +54,5 @@ int tcp_server::start_server() {
 
     return 0;
 }
+
+#endif // TCP_SERVER_HH
