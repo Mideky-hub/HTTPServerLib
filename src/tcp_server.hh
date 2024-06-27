@@ -10,17 +10,12 @@ class tcp_server {
 private:
     SOCKET m_socket;
     SOCKET mn_socket; 
-    std::string m_addr; 
-    LPWSADATA WSAData;
     short m_port;
+    LPWSADATA WSAData;
+    std::string m_addr; 
 public:
 
     tcp_server(std::string m_addr, short m_port) : m_addr(m_addr), m_port(m_port){
-        std::cout << "Starting server" << std::endl;
-
-        this->m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        this->WSAData = new WSADATA;
-
         this->start_server();
     }
 
@@ -41,6 +36,11 @@ public:
 };
 
 int tcp_server::start_server() {
+    std::cout << "Starting server" << std::endl;
+
+    this->m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    this->WSAData = new WSADATA;
+    
     if(this->m_socket == INVALID_SOCKET) {
         std::cerr << "Failed to create socket" << std::endl;
         return -1;
