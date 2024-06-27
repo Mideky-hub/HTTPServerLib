@@ -7,24 +7,24 @@
 
 namespace logging {
     enum log_level {
-    INFO,
-    WARN,
-    ERROR,
-    FATAL,
-    DEBUG,
-    MAX
-};
-
-std::string log_level_str(log_level level) {
-    static const std::array<std::string, MAX> logLevelStrings = {
-        "INFO", "WARN", "ERROR", "FATAL", "DEBUG"
+        INFO,
+        WARN,
+        ERROR,
+        FATAL,
+        DEBUG,
+        MAX
     };
 
-    if (level >= INFO && level < MAX) {
-        return logLevelStrings[level];
+    constexpr const char* log_level_str(log_level level) {
+        switch (level) {
+            case INFO: return "INFO";
+            case WARN: return "WARN";
+            case ERROR: return "ERROR";
+            case FATAL: return "FATAL";
+            case DEBUG: return "DEBUG";
+            default: return "UNKNOWN";
+        }
     }
-    return "UNKNOWN";
-}
 }
 
 namespace server{
