@@ -63,6 +63,7 @@ public:
 
     int start_server();
     void start_listener();
+    int accept_connection();
 };
 
 void tcp_server::start_listener(){
@@ -72,6 +73,12 @@ void tcp_server::start_listener(){
     sys::log(logging::LOG_DEBUG, "Listening on socket at " + this->m_addr + ":" + std::to_string(this->m_port));
 }
 
+int tcp_server::accept_connection() {
+    if((this->mn_socket = accept(this->m_socket, NULL, NULL)) == INVALID_SOCKET) {
+        sys::exit(EXIT_FAILURE, "Failed to accept connection.");
+    }
+    sys::log(logging::LOG_DEBUG, "Connection accepted");
+}
 
 int tcp_server::start_server() {
     WSACleanup(); // Clean up the WSAData in case it was already initialized
