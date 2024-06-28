@@ -40,7 +40,7 @@ public: // Variables
 
 public: // Methods
     // Constructor
-    socket_addr_in(const uint16_t PORT) : sin_family(AF_INET), sin_port(htons(PORT)), sin_addr(INADDR_ANY) {
+    socket_addr_in(uint64_t addr, uint16_t port) : sin_family(AF_INET), sin_port(port), sin_addr(addr) {
         memset(sin_zero, 0, sizeof(sin_zero));
     }
 
@@ -49,5 +49,49 @@ public: // Methods
 
 };
 
-
+void handle_error_binding_socket(errno_t err){
+    switch(err){
+        case EACCES:
+            sys::exit(EXIT_FAILURE, "The address is protected, and the user is not the superuser.");
+            break;
+        case EADDRINUSE:
+            sys::exit(EXIT_FAILURE, "The given address is already in use.");
+            break;
+        case EBADF:
+            sys::exit(EXIT_FAILURE, "sockfd is not a valid file descriptor.");
+            break;
+        case EINVAL:
+            sys::exit(EXIT_FAILURE, "The socket is already bound to an address.");
+            break;
+        case ENOTSOCK:
+            sys::exit(EXIT_FAILURE, "The file descriptor sockfd does not refer to a socket.");
+            break;
+        case EADDRNOTAVAIL:
+            sys::exit(EXIT_FAILURE, "A nonexistent interface was requested or the requested address was not local.");
+            break;
+        case EFAULT:
+            sys::exit(EXIT_FAILURE, "addr points outside the user's accessible address space.");
+            break;
+        case ELOOP:
+            sys::exit(EXIT_FAILURE, "Too many symbolic links were encountered in resolving addr.");
+            break;
+        case ENAMETOOLONG:
+            sys::exit(EXIT_FAILURE, "addr is too long.");
+            break;
+        case ENOENT:
+            sys::exit(EXIT_FAILURE, "A component in the directory prefix of the socket pathname does not exist.");
+            break;
+        case ENOMEM:
+            sys::exit(EXIT_FAILURE, "Insufficient kernel memory was available.");
+            break;
+        case ENOTDIR:
+            sys::exit(EXIT_FAILURE, "A component of the path prefix is not a directory.");
+            break;
+        case EROFS:
+            sys::exit(EXIT_FAILURE, "The socket inode would reside on a read-only filesystem.");
+            break;
+        default:
+            break;
+    }
+}
 #endif // SOCKET_ADDR_HH
