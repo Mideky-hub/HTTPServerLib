@@ -88,6 +88,10 @@ int tcp_server::start_server() {
 
     socket_addr_in addr(this->m_port);
     addr.sin_addr = inet_addr(this->m_addr.c_str());  
+    if(addr.sin_addr == INADDR_NONE) {
+        sys::exit(EXIT_FAILURE, "Invalid address. Please provide a valid IPv4 address. (e.g. 'x.x.x.x')");
+    }
+    sys::log(logging::LOG_DEBUG, "Socket address created");
 
     sys::log(logging::LOG_INFO, "Server started on " + this->m_addr + ":" + std::to_string(this->m_port));
     return 0;
