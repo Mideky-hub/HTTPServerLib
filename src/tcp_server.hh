@@ -62,7 +62,16 @@ public:
     }
 
     int start_server();
+    void start_listener();
 };
+
+void tcp_server::start_listener(){
+    if(listen(this->m_socket, SOMAXCONN) == SOCKET_ERROR) {
+        sys::exit(EXIT_FAILURE, "Failed to listen on socket.");
+    }
+    sys::log(logging::LOG_DEBUG, "Listening on socket at " + this->m_addr + ":" + std::to_string(this->m_port));
+}
+
 
 int tcp_server::start_server() {
     WSACleanup(); // Clean up the WSAData in case it was already initialized
