@@ -3,9 +3,10 @@
 
 // Local libraries
 #include "logging.hh"
+#include "socket_addr.hh"
 
 // Third-party libraries
-#include <WinSock2.h>
+#include <winsock.h>
 #if defined(_WIN32)
     void handle_error_winsock(errno_t err) {
         switch(err){
@@ -33,6 +34,7 @@
 // Standard libraries
 #include <iostream>
 #include <string>
+#include <memory>
 
 class tcp_server {
 private:
@@ -83,7 +85,14 @@ int tcp_server::start_server() {
         sys::exit(EXIT_FAILURE, "Failed to create socket.");
     }
     sys::log(logging::LOG_DEBUG, "Socket created");
-    
+
+    socket_addr_in addr(this->m_port);
+    addr.sin_addr = inet_addr(this->m_addr.c_str());  
+    if(addr.sin_addr == INADDR_NONE) {
+        sys::exit(EXIT_FAILURE, "Invalid address. Please provide a valid IPv4 address. (e.g. 'x.x.x.x')");
+    }
+    sys::log(logging::LOG_DEBUG, "Socket address created");
+
     sys::log(logging::LOG_INFO, "Server started on " + this->m_addr + ":" + std::to_string(this->m_port));
     return 0;
 }

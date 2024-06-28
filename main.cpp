@@ -2,8 +2,7 @@
 
 #define PORT 8080
 
-
 int main() {
-    tcp_server server("localhost", PORT);
+    tcp_server server("127.0.0.1", PORT);
     return 0;
 }
